@@ -30,20 +30,23 @@ namespace RickAMorty
 
             using (var client = new HttpClient())
             {
-                string urlBeg = "https://rickandmortyapi.com/api/character?page=";
-                double page = 1;
+                string urlBeg = "https://rickandmortyapi.com/api/character";
+                
 
-                while (page < 50)
+                while (urlBeg != null)
                 {
-                    string url = string.Concat(urlBeg, page.ToString());
-                    string jsonData = client.GetStringAsync(url).Result;
+                    //string url = string.Concat(urlBeg, page.ToString());
+                    string jsonData = client.GetStringAsync(urlBeg).Result;
+
                     RickAndMortyAPI api = JsonConvert.DeserializeObject<RickAndMortyAPI>(jsonData);
 
                     foreach (Character item in api.results)
                     {
                         cboCharacters.Items.Add(item);
                     }
-                    page++;
+
+                    urlBeg = api.info.next;
+                    //page++;
                 }
             }
         }
